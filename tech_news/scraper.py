@@ -20,8 +20,16 @@ def fetch(url):
 
 # Requisito 2
 def scrape_updates(html_content):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    selector = Selector(text=html_content)
+    items = selector.css(".entry-title")
+
+    news_list = []
+
+    for news in items:
+        links = news.css("a::attr(href)").get()
+        news_list.append(links)
+
+    return news_list
 
 
 # Requisito 3
