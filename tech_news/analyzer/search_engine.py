@@ -53,5 +53,11 @@ def search_by_date(date):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    news_list = database.search_news(
+        {"category": {"$regex": category, "$options": "i"}}
+    )
+
+    if news_list:
+        return iterating_over_the_data(news_list)
+
+    return news_list
