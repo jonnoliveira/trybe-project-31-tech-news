@@ -45,8 +45,52 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_news(html_content):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    selector = Selector(text=html_content)
+
+    # https://stackoverflow.com/questions/52849274/getting-the-current-url-page-ref-scrapy
+    url = selector.css("link[rel=canonical]::attr(href)").get()
+
+    title = (
+        selector.css(".entry-header-inner h1.entry-title::text").get().rstrip()
+    )
+
+    timesstamp = selector.css("ul.post-meta li.meta-date::text").get()
+
+    writer = selector.css(
+        "ul.post-meta li.meta-author span.author a::text"
+    ).get()
+
+    """ 
+    r'\d+'": O operador "+" faz diferença. Sem ele indicamos a representação
+    de um unico caracter numérico;
+    já com ele indicamos a representação de um ou mais caracteres numéricos
+    em sequência.
+    """
+    reading_time = int(
+        selector.css("ul.post-meta li.meta-reading-time::text").re_first(
+            r"\d+"
+        )
+    )
+
+    # https://developer.mozilla.org/en-US/docs/Web/CSS/:first-of-type
+    # https://developer.mozilla.org/en-US/docs/Web/CSS/Child_combinator
+    summary = "".join(
+        selector.css("div.entry-content > p:first-of-type *::text").getall()
+    ).strip()
+
+    category = selector.css(
+        ".meta-category a.category-style span.label::text"
+    ).get()
+
+    return {
+        "url": url,
+        "title": title,
+        "timestamp": timesstamp,
+        "writer": writer,
+        "reading_time": reading_time,
+        "summary": summary,
+        "category": category,
+    }
 
 
 # Requisito 5
