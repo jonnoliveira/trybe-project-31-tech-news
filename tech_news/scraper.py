@@ -61,8 +61,8 @@ def scrape_news(html_content):
         "ul.post-meta li.meta-author span.author a::text"
     ).get()
 
-    """ 
-    r'\d+'": O operador "+" faz diferença. Sem ele indicamos a representação
+    """
+    "O operador "+" no regex faz diferença. Sem ele indicamos a representação
     de um unico caracter numérico;
     já com ele indicamos a representação de um ou mais caracteres numéricos
     em sequência.
